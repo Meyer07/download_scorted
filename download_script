@@ -1,0 +1,21 @@
+#!/bin/bash
+# Clean and categorize directories automatically
+
+TARGET_DIR="$HOME/Downloads"
+cd "$TARGET_DIR" || exit
+
+declare -A folders=(
+    [Images]="jpg jpeg png gif svg webp"
+    [Documents]="pdf doc docx txt xls xlsx pptx md"
+    [Archives]="zip tar gz rar 7z"
+    [Media]="mp3 mp4 mkv mov avi"
+)
+
+for folder in "${!folders[@]}"; do
+    for ext in ${folders[$folder]}; do
+        # Case-insensitive match, move files safely
+        find . -maxdepth 1 -iname "*.$ext" -type f -exec mkdir -p "$folder" \; -exec mv {} "$folder/" \;
+    done
+done
+
+echo "🧹 Downloads folder sorted successfully!"
